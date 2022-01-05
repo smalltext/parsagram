@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Parsagram</string>
+    <string name="logout_label">Logout</string>
 </resources>
