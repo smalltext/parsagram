@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Allie/AndroidStudioProjects/Parsagram/app/src/main/res/layout/activity_feed.xml" value="0.1703125" />
         <entry key="..\:/Users/Allie/AndroidStudioProjects/Parsagram/app/src/main/res/layout/activity_login.xml" value="0.18153846153846154" />
         <entry key="..\:/Users/Allie/AndroidStudioProjects/Parsagram/app/src/main/res/layout/activity_main.xml" value="0.18153846153846154" />
+        <entry key="..\:/Users/Allie/AndroidStudioProjects/Parsagram/app/src/main/res/layout/item_post.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/Allie/AndroidStudioProjects/Parsagram/app/src/main/res/menu/menu_feed.xml" value="0.3333333333333333" />
       </map>
     </option>

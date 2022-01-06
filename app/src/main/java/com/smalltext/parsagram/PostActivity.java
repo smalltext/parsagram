@@ -17,30 +17,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.smalltext.parsagram.databinding.ActivityMainBinding;
+import com.smalltext.parsagram.databinding.ActivityPostBinding;
 
 import java.io.File;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class PostActivity extends AppCompatActivity {
 
-    public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = PostActivity.class.getSimpleName();
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
-    private ActivityMainBinding binding;
+    private ActivityPostBinding binding;
     private File photoFile;
     public String photoFileName = "photo.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityPostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         //queryPosts();
@@ -54,13 +51,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String description = binding.etDescription.getText().toString();
-                Log.i(TAG, "clicked with desc "+description);
                 if (description.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Description cannot be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PostActivity.this, "Description cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (photoFile == null || binding.ivPostImage.getDrawable() == null) {
-                    Toast.makeText(MainActivity.this, "Image cannot be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PostActivity.this, "Image cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 savePost(description, ParseUser.getCurrentUser());
@@ -77,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         // wrap File object into a content provider
         // required for API >= 24
         // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
-        Uri fileProvider = FileProvider.getUriForFile(MainActivity.this, "com.smalltext.fileprovider", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(PostActivity.this, "com.smalltext.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
@@ -131,26 +127,12 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "post submitted");
                     binding.etDescription.setText("");
                     binding.ivPostImage.setImageResource(0);
+
+                    setResult(RESULT_OK);
+                    finish();
                 } else {
                     Log.e(TAG, "error saving", e);
-                    Toast.makeText(MainActivity.this, "Problem submitting", Toast.LENGTH_SHORT);
-                }
-            }
-        });
-    }
-
-    private void queryPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e == null) {
-                    for (Post post : posts) {
-                        Log.i(TAG, "Post: "+post.getDescription() + ", username: "+post.getUser().getUsername());
-                    }
-                } else {
-                    Log.e(TAG, "can't get posts", e);
+                    Toast.makeText(PostActivity.this, "Problem submitting", Toast.LENGTH_SHORT);
                 }
             }
         });
@@ -158,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_feed, menu);
+        getMenuInflater().inflate(R.menu.menu_post, menu);
         return true;
     }
 
@@ -177,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         ParseUser.logOutInBackground(new LogOutCallback() {
             @Override
             public void done(ParseException e) {
-                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                Intent i = new Intent(PostActivity.this, LoginActivity.class);
                 startActivity(i);
                 finish();
             }
